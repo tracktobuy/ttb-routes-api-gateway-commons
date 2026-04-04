@@ -1,0 +1,62 @@
+openapi: 3.1.0
+info:
+  title: Track to Buy - OpenAPI 3.1
+  description: |-
+    Routes for single tasks and Lambda functions integrations
+  contact:
+    email: hello@tracktobuy.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.12
+tags:
+  - name: Email Subscription
+    description: Routes for email subscription like newsletter, updates and others
+paths:
+  /api/v1/mail-subscriptions:
+    post:
+      tags:
+        - Email Subscription
+      summary: Add new email to subscription database.
+      description: Add new email to subscription database.
+      operationId: addSubscription
+      requestBody:
+        description: Add new email to subscription database
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MailSubscription'
+        required: true
+      responses:
+        '201':
+          description: Successful created
+        '400':
+          description: Invalid input
+        '500':
+          description: Service unavailable
+    get:
+      tags:
+        - Email Subscription
+      summary: Returns all the emails subscribed to the newsletter.
+      description: Returns all the emails subscribed to the newsletter.
+      operationId: getSubscriptions
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MailSubscription'
+  
+components:
+  schemas:
+    MailSubscription:
+      required:
+        - email
+      type: object
+      properties:
+        email:
+          type: string
+          examples: [bob@bob.com]
