@@ -9,6 +9,21 @@ info:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.12
+x-amazon-apigateway-cors:
+  allowOrigins:
+    - "https://app.tracktobuy.com"
+    - "https://tracktobuy.com"
+    - "http://localhost"
+    - "http://localhost:8080"
+    - "http://localhost:3000"
+  allowMethods:
+    - GET
+    - POST
+    - OPTIONS
+  allowHeaders:
+    - Content-Type
+    - Authorization
+  maxAge: 300
 tags:
   - name: Email Subscription
     description: Routes for email subscription like newsletter, updates and others
