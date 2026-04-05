@@ -34,11 +34,12 @@ paths:
           description: Invalid input
         '500':
           description: Service unavailable
-    x-amazon-apigateway-integration:
-      uri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:947434607925:function:ttb-email-function/invocations
-      httpMethod: POST
-      type: aws_proxy
-      passthroughBehavior: when_no_match
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:947434607925:function:ttb-email-function/invocations
+        httpMethod: POST
+        type: aws_proxy
+        passthroughBehavior: when_no_match
+        payloadFormatVersion: "2.0"
     get:
       tags:
         - Email Subscription
@@ -64,4 +65,4 @@ components:
       properties:
         email:
           type: string
-          examples: [bob@bob.com]
+          example: bob@bob.com
