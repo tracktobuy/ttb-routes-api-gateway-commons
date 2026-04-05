@@ -55,6 +55,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MailSubscription'
+      x-amazon-apigateway-integration:
+        uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:947434607925:function:ttb-email-function/invocations
+        httpMethod: GET
+        type: aws_proxy
+        passthroughBehavior: when_no_match
+        payloadFormatVersion: "2.0"
   
 components:
   schemas:
