@@ -29,6 +29,8 @@ tags:
     description: Routes for email subscription like newsletter, updates and others
   - name: Groups
     description: Routes for group management, including labels
+  - name: Items
+    description: Routes for item management and retrieval
 paths:
   /api/v1/mail-subscriptions:
     post:
@@ -155,9 +157,93 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  /api/v1/items/{itemId}:
+    get:
+      tags:
+        - Items
+      summary: Returns details of a single item.
+      description: Returns the full details of a specific item by its unique identifier.
+      operationId: getItemById
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the item.
+          schema:
+            type: string
+            example: 019da83b-bc10-749g-8277-6bcde37013e0
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ItemDetailResponse"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
+          description: Item not found
+        "500":
+          description: Service unavailable
 
 components:
   schemas:
+    ItemStore:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Lenovo.com
+        price:
+          type: number
+          format: float
+          example: 5174.99
+    ItemDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 019da83b-bc10-749g-8277-6bcde37013e0
+        title:
+          type: string
+          example: "Lenovo V4 GEN 5 (14` Intel)"
+        imageURL:
+          type: string
+          format: uri
+          example: https://www.site.com/image.png
+        labels:
+          type: array
+          items:
+            type: string
+          example:
+            - computer
+            - laptop
+            - work
+            - equipment
+        stores:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemStore"
+        groups:
+          type: array
+          items:
+            type: string
+          example:
+            - wishlist
+    ItemDetailResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/ItemDetail"
     MailSubscription:
       required:
         - email
