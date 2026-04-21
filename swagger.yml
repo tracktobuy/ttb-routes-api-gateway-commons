@@ -42,14 +42,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/MailSubscription'
+              $ref: "#/components/schemas/MailSubscription"
         required: true
       responses:
-        '201':
+        "201":
           description: Successful created
-        '400':
+        "400":
           description: Invalid input
-        '500':
+        "500":
           description: Service unavailable
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:947434607925:function:ttb-email-function/invocations
@@ -64,14 +64,14 @@ paths:
       description: Returns all the emails subscribed to the newsletter.
       operationId: getSubscriptions
       responses:
-        '200':
+        "200":
           description: successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/MailSubscription'
+                  $ref: "#/components/schemas/MailSubscription"
       x-amazon-apigateway-integration:
         uri: arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:947434607925:function:ttb-email-function/invocations
         httpMethod: POST
@@ -83,7 +83,8 @@ paths:
       tags:
         - Groups
       summary: Returns labels associated with a group.
-      description: Returns the group details and all labels associated with the specified group.
+      description: Returns the group details and all labels associated with the
+        specified group.
       operationId: getGroupLabels
       parameters:
         - name: groupId
@@ -94,16 +95,27 @@ paths:
             type: string
             format: uuid
             example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GroupLabelsResponse'
-        '404':
+                $ref: "#/components/schemas/GroupLabelsResponse"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
           description: Group not found
-        '500':
+        "500":
           description: Service unavailable
 
 components:
@@ -142,4 +154,4 @@ components:
       type: object
       properties:
         data:
-          $ref: '#/components/schemas/GroupLabels'
+          $ref: "#/components/schemas/GroupLabels"
