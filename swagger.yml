@@ -27,6 +27,8 @@ x-amazon-apigateway-cors:
 tags:
   - name: Email Subscription
     description: Routes for email subscription like newsletter, updates and others
+  - name: Groups
+    description: Routes for group management, including labels
 paths:
   /api/v1/mail-subscriptions:
     post:
@@ -76,7 +78,34 @@ paths:
         type: aws_proxy
         passthroughBehavior: when_no_match
         payloadFormatVersion: "2.0"
-  
+  /api/v1/groups/{groupId}/labels:
+    get:
+      tags:
+        - Groups
+      summary: Returns labels associated with a group.
+      description: Returns the group details and all labels associated with the specified group.
+      operationId: getGroupLabels
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the group.
+          schema:
+            type: string
+            format: uuid
+            example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupLabelsResponse'
+        '404':
+          description: Group not found
+        '500':
+          description: Service unavailable
+
 components:
   schemas:
     MailSubscription:
@@ -87,3 +116,30 @@ components:
         email:
           type: string
           example: bob@bob.com
+    GroupLabels:
+      type: object
+      properties:
+        groupId:
+          type: string
+          format: uuid
+          example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+        groupName:
+          type: string
+          example: wishlist
+        labels:
+          type: array
+          items:
+            type: string
+          example:
+            - computer
+            - equipment
+            - guitars
+            - laptop
+            - live
+            - music
+            - work
+    GroupLabelsResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GroupLabels'
