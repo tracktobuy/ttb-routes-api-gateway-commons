@@ -194,6 +194,38 @@ paths:
           description: Item not found
         "500":
           description: Service unavailable
+    delete:
+      tags:
+        - Items
+      summary: Deletes an item by its unique identifier.
+      description: Permanently removes a specific item identified by its UUID.
+      operationId: deleteItemById
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the item to be deleted.
+          schema:
+            type: string
+            example: 019da83b-bc10-749g-8277-6bcde37013e0
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
+      responses:
+        "204":
+          description: No Content - Item successfully deleted
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
+          description: Item not found
+        "500":
+          description: Service unavailable
 
 components:
   schemas:
