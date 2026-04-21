@@ -117,6 +117,44 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  /api/v1/groups/{groupId}/items:
+    get:
+      tags:
+        - Groups
+      summary: Returns items associated with a group.
+      description: Returns all items associated with the specified group.
+      operationId: getGroupItems
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the group.
+          schema:
+            type: string
+            format: uuid
+            example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupItemsResponse"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
+          description: Group not found
+        "500":
+          description: Service unavailable
 
 components:
   schemas:
@@ -155,3 +193,31 @@ components:
       properties:
         data:
           $ref: "#/components/schemas/GroupLabels"
+    GroupItem:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 019da83a-ac99-738f-8266-5abec26012d9
+        title:
+          type: string
+          example: Guitar Gibson Flying V
+        price:
+          type: number
+          format: float
+          example: 2300.0
+        image:
+          type: string
+          format: uri
+          example: https://domain.com/image.png
+    GroupItemsResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/GroupItem"
