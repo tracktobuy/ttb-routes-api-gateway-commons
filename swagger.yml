@@ -24,6 +24,8 @@ x-amazon-apigateway-cors:
     - Content-Type
     - Authorization
   maxAge: 300
+security:
+  - bearerAuth: []
 tags:
   - name: Email Subscription
     description: Routes for email subscription like newsletter, updates and others
@@ -157,6 +159,42 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  /api/v1/items:
+    post:
+      tags:
+        - Items
+      summary: Add a new item to the database.
+      description: Creates a new item entry in the database with the provided URL,
+        title, price, currency, image, domain, and store information.
+      operationId: createItem
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
+      requestBody:
+        description: Item data to be added to the database
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateItemRequest"
+      responses:
+        "201":
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleItemResponse"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "500":
+          description: Service unavailable
   /api/v1/items/{itemId}:
     get:
       tags:
@@ -185,7 +223,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ItemDetailResponse"
+                $ref: "#/components/schemas/SingleItemResponse"
         "401":
           description: Unauthorized - JWT token is missing or invalid
         "403":
@@ -228,7 +266,174 @@ paths:
           description: Service unavailable
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
+    CreateItemRequest:
+      required:
+        - url
+        - title
+        - price
+        - currency
+        - image
+        - domain
+        - store
+        - groupId
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: https://www.site.com
+        title:
+          type: string
+          example: "Lenovo V4 GEN 5 (14` Intel)"
+        price:
+          type: number
+          format: float
+          example: 5174.99
+        currency:
+          type: string
+          example: BRL
+        image:
+          type: string
+          format: uri
+          example: https://www.site.com/image.png
+        domain:
+          type: string
+          example: site.com
+        store:
+          type: string
+          example: Lenovo.com
+        groupId:
+          type: string
+          format: uuid
+          example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+    ItemStoreDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 019db1b3-3e32-7e72-9f28-c039a9aeac55
+        version:
+          type: integer
+          example: 1
+        price:
+          type: number
+          format: float
+          example: 5174.99
+        shippingCost:
+          type: number
+          format: float
+          example: 0.0
+        currency:
+          type: string
+          example: BRL
+        domain:
+          type: string
+          example: site.com
+        storeName:
+          type: string
+          example: Lenovo.com
+        bestOption:
+          type: boolean
+          example: false
+        url:
+          type: string
+          format: uri
+          example: https://www.site.com
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-04-21T14:00:00"
+        updatedAt:
+          type: string
+          example: ""
+        createdBy:
+          type: string
+          format: uuid
+          example: 019db1b7-8a97-774f-92f2-53008ddfe195
+    ItemGroupDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 019db1c8-5c31-7dd3-b62e-63d8ec710d5c
+        version:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: wishlist
+        budget:
+          type: number
+          format: float
+          example: 6000.0
+        budgetCurrency:
+          type: string
+          example: BRL
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-04-21T14:00:00"
+        updatedAt:
+          type: string
+          example: ""
+        createdBy:
+          type: string
+          format: uuid
+          example: 019db1b7-8a97-774f-92f2-53008ddfe195
+    SingleItemDetail:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 019db1b2-0d1d-76a7-835c-b20982484799
+        version:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "Lenovo V4 GEN 5 (14` Intel)"
+        imageURL:
+          type: string
+          format: uri
+          example: https://www.site.com/image.png
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-04-21T14:00:00"
+        updatedAt:
+          type: string
+          example: ""
+        createdBy:
+          type: string
+          format: uuid
+          example: 019db1b7-8a97-774f-92f2-53008ddfe195
+        labels:
+          type: array
+          items:
+            type: string
+          example: []
+        stores:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemStoreDetail"
+        groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/ItemGroupDetail"
+    SingleItemResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/SingleItemDetail"
     ItemStore:
       type: object
       properties:
