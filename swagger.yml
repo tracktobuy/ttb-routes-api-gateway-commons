@@ -33,6 +33,8 @@ tags:
     description: Routes for group management, including labels
   - name: Items
     description: Routes for item management and retrieval
+  - name: Web Scrapper
+    description: Routes for extracting data from URLs
 paths:
   /api/v1/mail-subscriptions:
     post:
@@ -157,6 +159,41 @@ paths:
           description: Forbidden - JWT token is expired or does not have permission
         "404":
           description: Group not found
+        "500":
+          description: Service unavailable
+  /api/v1/extractions:
+    get:
+      tags:
+        - Web Scrapper
+      summary: Extract product data from a URL.
+      description: Returns extracted product information from the provided product link.
+      operationId: extractProductData
+      parameters:
+        - name: url
+          in: query
+          required: true
+          description: The product link to extract data from.
+          schema:
+            type: string
+            format: uri
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
+      responses:
+        "200":
+          description: Successful data extraction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExtractionResponse"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
         "500":
           description: Service unavailable
   /api/v1/items:
@@ -544,3 +581,35 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/GroupItem"
+    ExtractionDetail:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          example: "https://www.site.com"
+        title:
+          type: string
+          example: "Lenovo V4 GEN 5 (14` Intel)"
+        price:
+          type: number
+          format: float
+          example: 5174.99
+        currency:
+          type: string
+          example: "BRL"
+        image:
+          type: string
+          format: uri
+          example: "https://www.site.com/image.png"
+        domain:
+          type: string
+          example: "site.com"
+        store:
+          type: string
+          example: "Lenovo.com"
+    ExtractionResponse:
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/ExtractionDetail"
