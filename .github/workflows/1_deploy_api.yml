@@ -19,8 +19,8 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION1 }}
 
       - name: Deploy to API Gateway
         run: |
-          aws apigateway2 reimport-api --api-id ${{ vars.API_ID }} --body file://swagger.yml --region us-east-2 
+          aws apigateway2 reimport-api --api-id ${{ vars.API_GW_ID }} --body file://swagger.yml --region us-east-2 
