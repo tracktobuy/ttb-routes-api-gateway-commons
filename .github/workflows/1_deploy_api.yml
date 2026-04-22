@@ -1,0 +1,26 @@
+name: 1 - Deploy API Routes
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+
+jobs:
+  deploy-api-routes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to API Gateway
+        run: |
+          aws apigateway2 reimport-api --api-id ${{ vars.API_ID }} --body file://swagger.yml --region us-east-2 
