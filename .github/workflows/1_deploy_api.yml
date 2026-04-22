@@ -23,4 +23,4 @@ jobs:
 
       - name: Deploy to API Gateway
         run: |
-          aws apigateway2 reimport-api --api-id ${{ vars.API_GW_ID }} --body file://swagger.yml --region us-east-2 
+          aws apigatewayv2 reimport-api --api-id ${{ vars.API_GW_ID }} --body file://swagger.yml --region us-east-2 
