@@ -23,4 +23,29 @@ jobs:
 
       - name: Deploy to API Gateway
         run: |
-          aws apigatewayv2 reimport-api --api-id ${{ vars.API_GW_ID }} --body file://swagger.yml --region us-east-2 
+          aws apigatewayv2 reimport-api --api-id ${{ vars.API_GW_ID }} --body file://./swagger.yml --region us-east-2 
+
+  publish-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+
+      - name: Generate API Docs
+        run: npx redoc-cli bundle -o ./public/api-docs.html swagger.yaml
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION1 }}
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync ./public s3://${{ vars.S3_BUCKET_NAME }}/docs/apis --delete
