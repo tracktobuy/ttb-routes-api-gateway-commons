@@ -46,7 +46,7 @@ jobs:
 
   invalidate-cloudfront:
     runs-on: ubuntu-latest
-    needs: deploy-s3
+    needs: publish-docs
 
     steps:
       - name: Configure AWS credentials via OIDC
