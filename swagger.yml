@@ -84,6 +84,30 @@ paths:
         type: aws_proxy
         passthroughBehavior: when_no_match
         payloadFormatVersion: "2.0"
+  
+  /api/v1/accounts:
+    post:
+      tags:  
+        - Accounts
+      summary: Create a new user account in Track to Buy.
+      description: Creates a new user account in Track to Buy and returns an encrypted cookie in response header.
+      operationId: CreateAccount
+      requestBody:
+        description: New user request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewAccountRequest"
+      responses:
+        "201":
+          description: Account successfully created 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewAccountResponse"
+
+  
   /api/v1/groups/{groupId}/labels:
     get:
       tags:
@@ -619,3 +643,78 @@ components:
       properties:
         data:
           $ref: "#/components/schemas/ExtractionDetail"
+    NewAccountRequest:
+      required:
+        - uuid
+        - name
+        - username
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: This value must come from the authentication service (OAuth2, Supabase or Firebase).
+          example: "1954ef32-7adc-4ede-9495-e5cdc316fb8e"
+        name:
+          type: string
+          example: "John Doe"
+        username:
+          type: string
+          example: "its_jdoe"
+
+    GroupResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 1954ef32-7adc-4ede-9495-e5cdc316fb8e
+        name:
+          type: string
+          example: Wishlist
+        budget:
+          type: float
+          example: 123.22
+        budgetCurrency:
+          type: string
+          example: USD
+        createdAt:
+          type: string
+          format: datetime
+          example: 2025-05-01T12:33:22
+        updatedAt:
+          description: May be omitted if empty
+          type: string
+          format: datetime
+          example: 2025-05-01T12:33:22       
+        createdBy:
+          description: User UUID that created the group. May be omitted if empty
+          example: 1fbd9af6-bfe0-4aa4-b14b-46663953ce5e
+
+
+    UserResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 1954ef32-7adc-4ede-9495-e5cdc316fb8e
+        name:
+          type: string
+          example: John Doe
+        username:
+          type: string
+          example: its_jdoe
+        groups:
+          descriptions: List of groups that this user belongs to. May be omitted if empty
+          type: array
+          items:
+            $ref: "#/components/schemas/GroupResponse"
+
+    NewAccountResponse:
+      required:
+        - uuid
+        - name
+        - username
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/UserResponse"
+
