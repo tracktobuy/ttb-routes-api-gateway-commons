@@ -107,7 +107,69 @@ paths:
               schema:
                 $ref: "#/components/schemas/NewAccountResponse"
 
-  
+  /api/v1/groups/{groupId}:
+    get:
+      summary: Return a group given its UUID
+      description: Return detail of a specific group by informing its UUID in parameter.
+      tags:
+        - Groups
+      operationId: getGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the group.
+          schema:
+            type: string
+            format: uuid
+            example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        "404":
+          description: Group not found
+        "500":
+          description: Service unavailable
+    put:
+      summary: Updates a few details of a group
+      description: Update name, budget and budget currency.
+      tags:
+        - Groups
+      operationId: updateGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the group.
+          schema:
+            type: string
+            format: uuid
+            example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+      
+      requestBody:
+        description: New user request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupRequest"
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        "404":
+          description: Group not found
+        "500":
+          description: Service unavailable
+
   /api/v1/groups/{groupId}/labels:
     get:
       tags:
@@ -147,6 +209,7 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  
   /api/v1/groups/{groupId}/items:
     get:
       tags:
@@ -185,6 +248,7 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  
   /api/v1/extractions:
     get:
       tags:
@@ -220,6 +284,7 @@ paths:
           description: Forbidden - JWT token is expired or does not have permission
         "500":
           description: Service unavailable
+  
   /api/v1/items:
     post:
       tags:
@@ -660,7 +725,18 @@ components:
         username:
           type: string
           example: "its_jdoe"
-
+    GroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: New Group Name
+        budget:
+          type: float
+          example: 123.22
+        budgetCurrency:
+          type: string
+          example: USD
     GroupResponse:
       type: object
       properties:
@@ -688,8 +764,6 @@ components:
         createdBy:
           description: User UUID that created the group. May be omitted if empty
           example: 1fbd9af6-bfe0-4aa4-b14b-46663953ce5e
-
-
     UserResponse:
       type: object
       properties:
@@ -707,7 +781,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/GroupResponse"
-
     NewAccountResponse:
       required:
         - uuid
