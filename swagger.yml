@@ -84,6 +84,92 @@ paths:
         type: aws_proxy
         passthroughBehavior: when_no_match
         payloadFormatVersion: "2.0"
+  
+  /api/v1/accounts:
+    post:
+      tags:  
+        - Accounts
+      summary: Create a new user account in Track to Buy.
+      description: Creates a new user account in Track to Buy and returns an encrypted cookie in response header.
+      operationId: CreateAccount
+      requestBody:
+        description: New user request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewAccountRequest"
+      responses:
+        "201":
+          description: Account successfully created 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewAccountResponse"
+
+  /api/v1/groups/{groupId}:
+    get:
+      summary: Return a group given its UUID
+      description: Return detail of a specific group by informing its UUID in parameter.
+      tags:
+        - Groups
+      operationId: getGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the group.
+          schema:
+            type: string
+            format: uuid
+            example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        "404":
+          description: Group not found
+        "500":
+          description: Service unavailable
+    put:
+      summary: Updates a few details of a group
+      description: Update name, budget and budget currency.
+      tags:
+        - Groups
+      operationId: updateGroup
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the group.
+          schema:
+            type: string
+            format: uuid
+            example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+      
+      requestBody:
+        description: New user request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupRequest"
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupResponse"
+        "404":
+          description: Group not found
+        "500":
+          description: Service unavailable
+
   /api/v1/groups/{groupId}/labels:
     get:
       tags:
@@ -123,6 +209,7 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  
   /api/v1/groups/{groupId}/items:
     get:
       tags:
@@ -161,6 +248,7 @@ paths:
           description: Group not found
         "500":
           description: Service unavailable
+  
   /api/v1/extractions:
     get:
       tags:
@@ -196,6 +284,7 @@ paths:
           description: Forbidden - JWT token is expired or does not have permission
         "500":
           description: Service unavailable
+  
   /api/v1/items:
     post:
       tags:
@@ -232,6 +321,31 @@ paths:
           description: Forbidden - JWT token is expired or does not have permission
         "500":
           description: Service unavailable
+    get:
+      tags:
+        - Items
+      summary: List all items for a specific user
+      description: List all items for a specific user. The userId is sent by cookies and retrieved inside the application.
+      operationId: listAllItems
+      responses:
+        "201":
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SingleItemDetail"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "500":
+          description: Service unavailable
+  
   /api/v1/items/{itemId}:
     get:
       tags:
@@ -302,6 +416,110 @@ paths:
         "500":
           description: Service unavailable
 
+  /api/v1/items/{itemId}/stores:
+    get:
+      tags:
+       - Stores
+      summary: Returns list of stores of an specific item.
+      description: Returns list of stores of an specific item.
+      operationId: getItemStores
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the item.
+          schema:
+            type: string
+            example: 019da83b-bc10-749g-8277-6bcde37013e0
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListStoreResponse"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
+          description: Item not found
+        "500":
+          description: Service unavailable
+  
+  /api/v1/stores/{storeId}:
+    put:
+      tags:
+        - Stores
+      summary: Updates the shipping for that specific store
+      description: Updates the shipping for that specific store. The store UUID parameter is already binded to the item.
+      operationId: updateStore
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the store.
+          schema:
+            type: string
+            example: 019da83b-bc10-749g-8277-6bcde37013e0
+      
+      requestBody:
+        description: New user request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StoreUpdateRequest"
+
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object 
+                    $ref: "#/components/schemas/StoreResponse"
+        "404":
+          description: Group not found
+        "500":
+          description: Service unavailable
+    delete:
+      tags:
+        - Stores
+      summary: Deletes a specific store.
+      description: Deletes a specific store. The store itself is already binded to an item.
+      operationId: deleteStore
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the store.
+          schema:
+            type: string
+            example: 019da83b-bc10-749g-8277-6bcde37013e0
+        - name: Authorization
+          in: header
+          required: true
+          description: Bearer JWT token for authentication.
+          schema:
+            type: string
+            example: Bearer <token_jwt>
+      responses:
+        "204":
+          description: No Content - Store successfully deleted
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
+          description: Store not found
+        "500":
+          description: Service unavailable
+
+       
 components:
   securitySchemes:
     bearerAuth:
@@ -447,10 +665,10 @@ components:
         createdAt:
           type: string
           format: date-time
-          example: "2026-04-21T14:00:00"
+          example: "2026-04-21T14:12:33"
         updatedAt:
           type: string
-          example: ""
+          example: "2026-04-22T11:32:22"
         createdBy:
           type: string
           format: uuid
@@ -464,14 +682,6 @@ components:
             - laptop
             - work
             - equipment
-        stores:
-          type: array
-          items:
-            $ref: "#/components/schemas/ItemStoreDetail"
-        groups:
-          type: array
-          items:
-            $ref: "#/components/schemas/ItemGroupDetail"
     SingleItemResponse:
       type: object
       properties:
@@ -619,3 +829,129 @@ components:
       properties:
         data:
           $ref: "#/components/schemas/ExtractionDetail"
+    NewAccountRequest:
+      required:
+        - uuid
+        - name
+        - username
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: This value must come from the authentication service (OAuth2, Supabase or Firebase).
+          example: "1954ef32-7adc-4ede-9495-e5cdc316fb8e"
+        name:
+          type: string
+          example: "John Doe"
+        username:
+          type: string
+          example: "its_jdoe"
+    GroupRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: New Group Name
+        budget:
+          type: float
+          example: 123.22
+        budgetCurrency:
+          type: string
+          example: USD
+    GroupResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 1954ef32-7adc-4ede-9495-e5cdc316fb8e
+        name:
+          type: string
+          example: Wishlist
+        budget:
+          type: float
+          example: 123.22
+        budgetCurrency:
+          type: string
+          example: USD
+        createdAt:
+          type: string
+          format: datetime
+          example: 2025-05-01T12:33:22
+        updatedAt:
+          description: May be omitted if empty
+          type: string
+          format: datetime
+          example: 2025-05-01T12:33:22       
+        createdBy:
+          description: User UUID that created the group. May be omitted if empty
+          example: 1fbd9af6-bfe0-4aa4-b14b-46663953ce5e
+    UserResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 1954ef32-7adc-4ede-9495-e5cdc316fb8e
+        name:
+          type: string
+          example: John Doe
+        username:
+          type: string
+          example: its_jdoe
+        groups:
+          descriptions: List of groups that this user belongs to. May be omitted if empty
+          type: array
+          items:
+            $ref: "#/components/schemas/GroupResponse"
+    NewAccountResponse:
+      required:
+        - uuid
+        - name
+        - username
+      type: object
+      properties:
+        data:
+          $ref: "#/components/schemas/UserResponse"
+    StoreResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 019ed192-a608-74e0-8e50-5702e3a07057
+        price:
+          type: decimal
+          example: 200.22
+        shippingCost:
+          type: decimal
+          example: 1.42
+        currency:
+          type: string
+          example: BRL
+        domain:
+          type: string
+          example: store-anywhere.com
+        name:
+          type: string
+          example: Store Anywhere
+        bestOption:
+          type: boolean
+          example: false
+        url:
+          type: string
+          example: https://store-anywhere.com/item/the-specific-item.html
+        createdAt:
+          type: string
+          format: datetime
+          example: 2026-06-16T14:55:09
+    ListStoreResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreResponse"
+    StoreUpdateRequest:
+      type: object
+      properties:
+        shippingCost:
+          type: decimal
+          example: 1.42
