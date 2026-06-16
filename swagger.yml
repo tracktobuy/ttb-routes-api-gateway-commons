@@ -321,6 +321,7 @@ paths:
           description: Forbidden - JWT token is expired or does not have permission
         "500":
           description: Service unavailable
+  
   /api/v1/items/{itemId}:
     get:
       tags:
@@ -382,6 +383,37 @@ paths:
       responses:
         "204":
           description: No Content - Item successfully deleted
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "404":
+          description: Item not found
+        "500":
+          description: Service unavailable
+
+  /api/v1/items/{itemId}/stores:
+    get:
+      tags:
+       - Stores
+      summary: Returns list of stores of an specific item.
+      description: Returns list of stores of an specific item.
+      operationId: getItemStores
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The unique identifier (UUID) of the item.
+          schema:
+            type: string
+            example: 019da83b-bc10-749g-8277-6bcde37013e0
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListStoreResponse"
         "401":
           description: Unauthorized - JWT token is missing or invalid
         "403":
@@ -790,4 +822,41 @@ components:
       properties:
         data:
           $ref: "#/components/schemas/UserResponse"
-
+    StoreResponse:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 019ed192-a608-74e0-8e50-5702e3a07057
+        price:
+          type: decimal
+          example: 200.22
+        shippingCost:
+          type: decimal
+          example: 1.42
+        currency:
+          type: string
+          example: BRL
+        domain:
+          type: string
+          example: store-anywhere.com
+        name:
+          type: string
+          example: Store Anywhere
+        bestOption:
+          type: boolean
+          example: false
+        url:
+          type: string
+          example: https://store-anywhere.com/item/the-specific-item.html
+        createdAt:
+          type: string
+          format: datetime
+          example: 2026-06-16T14:55:09
+    ListStoreResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/StoreResponse"
