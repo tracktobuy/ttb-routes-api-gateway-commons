@@ -321,6 +321,30 @@ paths:
           description: Forbidden - JWT token is expired or does not have permission
         "500":
           description: Service unavailable
+    get:
+      tags:
+        - Items
+      summary: List all items for a specific user
+      description: List all items for a specific user. The userId is sent by cookies and retrieved inside the application.
+      operationId: listAllItems
+      responses:
+        "201":
+          description: Item successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SingleItemDetail"
+        "401":
+          description: Unauthorized - JWT token is missing or invalid
+        "403":
+          description: Forbidden - JWT token is expired or does not have permission
+        "500":
+          description: Service unavailable
   
   /api/v1/items/{itemId}:
     get:
@@ -641,10 +665,10 @@ components:
         createdAt:
           type: string
           format: date-time
-          example: "2026-04-21T14:00:00"
+          example: "2026-04-21T14:12:33"
         updatedAt:
           type: string
-          example: ""
+          example: "2026-04-22T11:32:22"
         createdBy:
           type: string
           format: uuid
@@ -658,14 +682,6 @@ components:
             - laptop
             - work
             - equipment
-        stores:
-          type: array
-          items:
-            $ref: "#/components/schemas/ItemStoreDetail"
-        groups:
-          type: array
-          items:
-            $ref: "#/components/schemas/ItemGroupDetail"
     SingleItemResponse:
       type: object
       properties:
