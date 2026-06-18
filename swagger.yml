@@ -101,7 +101,13 @@ paths:
               $ref: "#/components/schemas/NewAccountRequest"
       responses:
         "201":
-          description: Account successfully created 
+          description: Account successfully created
+          headers:
+            Set-Cookie:
+              description: Sets the account session in cookie. Data is encrypted and the field is "account"
+              schema:
+                type: string
+                example: account=eyJ1c2VySWQiOiI2YTMzMzkwZDY2MDMwNzhlNTIzMmY0OTAiLCJ1c2VyVVVJRCI6IjM5Njc5YmFhLTI2MTUtNDMyMC1hYjU2LTIwOTJiNzBiZDVhMSJ9; Path=/; Max-Age=3600; HttpOnly; Secure; SameSite=Lax
           content:
             application/json:
               schema:
@@ -294,13 +300,13 @@ paths:
         title, price, currency, image, domain, and store information.
       operationId: createItem
       parameters:
-        - name: Authorization
-          in: header
+        - name: account
+          in: cookie
           required: true
-          description: Bearer JWT token for authentication.
+          description: The encrypted account session information.
           schema:
             type: string
-            example: Bearer <token_jwt>
+            example: account=eyJ1c2VySWQiOiI2YTMzMzkwZDY2MDMwNzhlNTIzMmY0OTAiLCJ1c2VyVVVJRCI6IjM5Njc5YmFhLTI2MTUtNDMyMC1hYjU2LTIwOTJiNzBiZDVhMSJ9
       requestBody:
         description: Item data to be added to the database
         required: true
@@ -327,6 +333,14 @@ paths:
       summary: List all items for a specific user
       description: List all items for a specific user. The userId is sent by cookies and retrieved inside the application.
       operationId: listAllItems
+      parameters:
+        - name: account
+          in: cookie
+          required: true
+          description: The encrypted account session information.
+          schema:
+            type: string
+            example: account=eyJ1c2VySWQiOiI2YTMzMzkwZDY2MDMwNzhlNTIzMmY0OTAiLCJ1c2VyVVVJRCI6IjM5Njc5YmFhLTI2MTUtNDMyMC1hYjU2LTIwOTJiNzBiZDVhMSJ9
       responses:
         "201":
           description: Item successfully created
