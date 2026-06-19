@@ -40,7 +40,7 @@ paths:
     post:
       tags:
         - Email Subscription
-      summary: Add new email to subscription database.
+      summary: Subscribes new email.
       description: Add new email to subscription database.
       operationId: addSubscription
       requestBody:
@@ -66,7 +66,7 @@ paths:
     get:
       tags:
         - Email Subscription
-      summary: Returns all the emails subscribed to the newsletter.
+      summary: List emails subscribed to the newsletter.
       description: Returns all the emails subscribed to the newsletter.
       operationId: getSubscriptions
       responses:
@@ -89,7 +89,7 @@ paths:
     post:
       tags:  
         - Accounts
-      summary: Create a new user account in Track to Buy.
+      summary: New user account.
       description: Creates a new user account in Track to Buy and returns an encrypted cookie in response header.
       operationId: CreateAccount
       requestBody:
@@ -121,7 +121,7 @@ paths:
 
   /api/v1/groups/{groupId}:
     get:
-      summary: Return a group given its UUID
+      summary: Get a group by UUID
       description: Return detail of a specific group by informing its UUID in parameter.
       tags:
         - Groups
@@ -141,7 +141,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupResponse"
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/GroupResponse"
         "400":
           description: Bad Request
           content:
@@ -161,7 +165,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
-      summary: Updates a few details of a group
+      summary: Update group information
       description: Update name, budget and budget currency.
       tags:
         - Groups
@@ -177,7 +181,7 @@ paths:
             example: 019d91b3-12ab-773e-8f54-5162f6d87e56
       
       requestBody:
-        description: New user request payload
+        description: Group information to update
         required: true
         content:
           application/json:
@@ -190,7 +194,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/GroupResponse"
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "#/components/schemas/GroupResponse"
         "400":
           description: Bad Request
           content:
@@ -215,7 +223,7 @@ paths:
     get:
       tags:
         - Groups
-      summary: Returns labels associated with a group.
+      summary: List all labels from a group
       description: Returns the group details and all labels associated with the
         specified group.
       operationId: getGroupLabels
@@ -265,7 +273,7 @@ paths:
     get:
       tags:
         - Groups
-      summary: Returns items associated with a group.
+      summary: List all items from a group.
       description: Returns all items associated with the specified group.
       operationId: getGroupItems
       parameters:
@@ -356,7 +364,7 @@ paths:
     post:
       tags:
         - Items
-      summary: Add a new item to the database.
+      summary: Add a new item.
       description: Creates a new item entry in the database with the provided URL,
         title, price, currency, image, domain, and store information.
       operationId: createItem
@@ -397,7 +405,7 @@ paths:
     get:
       tags:
         - Items
-      summary: List all items for a specific user
+      summary: List all items
       description: List all items for a specific user. The userId is sent by cookies and retrieved inside the application.
       operationId: listAllItems
       parameters:
@@ -437,7 +445,7 @@ paths:
     get:
       tags:
         - Items
-      summary: Returns details of a single item.
+      summary: Get item by UUID.
       description: Returns the full details of a specific item by its unique identifier.
       operationId: getItemById
       parameters:
@@ -484,7 +492,7 @@ paths:
     delete:
       tags:
         - Items
-      summary: Deletes an item by its unique identifier.
+      summary: Delete item by UUID.
       description: Permanently removes a specific item identified by its UUID.
       operationId: deleteItemById
       parameters:
@@ -528,7 +536,7 @@ paths:
     get:
       tags:
        - Stores
-      summary: Returns list of stores of an specific item.
+      summary: List stores by item UUID.
       description: Returns list of stores of an specific item.
       operationId: getItemStores
       parameters:
@@ -581,7 +589,7 @@ paths:
             type: string
             example: 019da83b-bc10-749g-8277-6bcde37013e0
       requestBody:
-        description: New user request payload
+        description: Request body for shipping cost update
         required: true
         content:
           application/json:
@@ -1095,6 +1103,9 @@ components:
         shippingCost:
           type: decimal
           example: 1.42
+        shippingCurrency:
+          type: string
+          example: BRL
     InternalServerErrorResponse:
       type: object
       properties:
