@@ -112,6 +112,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NewAccountResponse"
+        "500":
+          description: Service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
 
   /api/v1/groups/{groupId}:
     get:
@@ -136,10 +142,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GroupResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     put:
       summary: Updates a few details of a group
       description: Update name, budget and budget currency.
@@ -171,10 +191,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GroupResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
+
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
 
   /api/v1/groups/{groupId}/labels:
     get:
@@ -207,14 +242,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GroupLabelsResponse"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   
   /api/v1/groups/{groupId}/items:
     get:
@@ -246,14 +291,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GroupItemsResponse"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Group not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   
   /api/v1/extractions:
     get:
@@ -284,12 +339,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ExtractionResponse"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   
   /api/v1/items:
     post:
@@ -321,12 +382,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SingleItemResponse"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     get:
       tags:
         - Items
@@ -353,12 +420,18 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/SingleItemDetail"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   
   /api/v1/items/{itemId}:
     get:
@@ -389,14 +462,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SingleItemResponse"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
+
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - Items
@@ -421,14 +505,24 @@ paths:
       responses:
         "204":
           description: No Content - Item successfully deleted
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
 
   /api/v1/items/{itemId}/stores:
     get:
@@ -452,14 +546,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListStoreResponse"
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Item not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
   
   /api/v1/stores/{storeId}:
     put:
@@ -476,7 +580,6 @@ paths:
           schema:
             type: string
             example: 019da83b-bc10-749g-8277-6bcde37013e0
-      
       requestBody:
         description: New user request payload
         required: true
@@ -484,7 +587,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/StoreUpdateRequest"
-
       responses:
         "200":
           description: Successful operation
@@ -496,10 +598,24 @@ paths:
                   data:
                     type: object 
                     $ref: "#/components/schemas/StoreResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
-          description: Group not found
+          description: Store not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
     delete:
       tags:
         - Stores
@@ -524,14 +640,24 @@ paths:
       responses:
         "204":
           description: No Content - Store successfully deleted
-        "401":
-          description: Unauthorized - JWT token is missing or invalid
-        "403":
-          description: Forbidden - JWT token is expired or does not have permission
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
         "404":
           description: Store not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotFoundResponse"
         "500":
-          description: Service unavailable
+          description: Service unavailable 
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerErrorResponse"
 
        
 components:
@@ -969,3 +1095,96 @@ components:
         shippingCost:
           type: decimal
           example: 1.42
+    InternalServerErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            code: 
+              type: string
+              example: INTERNAL_SERVER_ERROR
+            message: 
+              type: string
+              example: The service is currently unable to complete your request because an external dependency is down.
+            details:
+              type: object
+              properties:
+                service:
+                  type: string
+                  example: WishlistRecommendationAPI
+                retryAfter:
+                  type: integer
+                  example: 30
+            timestamp:
+              type: string
+              format: datetime
+              example: 2026-06-18T20:45:10Z
+            path:
+              type: string
+              example: /api/v1/wishlists/recommendations
+    BadRequestResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            code: 
+              type: string
+              example: BAD_REQUEST
+            message: 
+              type: string
+              example: The request could not be processed.
+            details:
+              type: object
+              properties:
+                field:
+                  type: string
+                  example: uuid
+                issue:
+                  type: string
+                  example: The field uuid is mandatory.
+            timestamp:
+              type: string
+              format: datetime
+              example: 2026-06-18T20:45:10Z
+            path:
+              type: string
+              example: /api/v1/groups
+    NotFoundResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            code: 
+              type: string
+              example: NOT_FOUND
+            message: 
+              type: string
+              example: The request could not be processed.
+            details:
+              type: object
+              properties:
+                field:
+                  type: string
+                  example: uuid
+                issue:
+                  type: string
+                  example: UUID provided is invalid or does not exist in the database.
+            timestamp:
+              type: string
+              format: datetime
+              example: 2026-06-18T20:45:10Z
+            path:
+              type: string
+              example: /api/v1/groups/123abc-456fde
