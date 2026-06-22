@@ -818,9 +818,8 @@ components:
           type: string
           example: "2026-04-22T11:32:22"
         createdBy:
-          type: string
-          format: uuid
-          example: 019db1b7-8a97-774f-92f2-53008ddfe195
+          type: object
+          $ref: "#/components/schemas/UserResponse"
         labels:
           type: array
           items:
@@ -1045,11 +1044,6 @@ components:
         username:
           type: string
           example: its_jdoe
-        groups:
-          descriptions: List of groups that this user belongs to. May be omitted if empty
-          type: array
-          items:
-            $ref: "#/components/schemas/GroupResponse"
     NewAccountResponse:
       required:
         - uuid
