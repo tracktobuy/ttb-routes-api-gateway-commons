@@ -27,19 +27,38 @@ x-amazon-apigateway-cors:
 security:
   - bearerAuth: []
 tags:
-  - name: Email Subscription
+  - name: Subscription
     description: Routes for email subscription like newsletter, updates and others
   - name: Groups
     description: Routes for group management, including labels
   - name: Items
     description: Routes for item management and retrieval
+  - name: Stores
+    description: Routes for stores management and retrieval
+  - name: Accounts
+    description: Routes for accounts management and retrieval
   - name: Web Scrapper
     description: Routes for extracting data from URLs
+
+x-tagGroups:
+  - name: Backend Service
+    tags:
+      - Groups
+      - Items
+      - Stores
+      - Accounts
+  - name: Subscription Service
+    tags:
+      - Subscription
+  - name: Web Scrapper Service
+    tags:
+      - Web Scrapper
+
 paths:
   /ttb-subscription-service/v1/mail-subscriptions:
     post:
       tags:
-        - Email Subscription
+        - Subscription
       summary: Subscribes new email.
       description: Add new email to subscription database.
       operationId: addSubscription
@@ -65,7 +84,7 @@ paths:
         payloadFormatVersion: "2.0"
     get:
       tags:
-        - Email Subscription
+        - Subscription
       summary: List emails subscribed to the newsletter.
       description: Returns all the emails subscribed to the newsletter.
       operationId: getSubscriptions
@@ -87,7 +106,7 @@ paths:
   
   /ttb-back-service/v1/accounts:
     post:
-      tags:  
+      tags: 
         - Accounts
       summary: New user account.
       description: Creates a new user account in Track to Buy and returns an encrypted cookie in response header.
@@ -535,7 +554,7 @@ paths:
   /ttb-back-service/v1/items/{itemId}/stores:
     get:
       tags:
-       - Stores
+        - Stores
       summary: List stores by item UUID.
       description: Returns list of stores of an specific item.
       operationId: getItemStores
