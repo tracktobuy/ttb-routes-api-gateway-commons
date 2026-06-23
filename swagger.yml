@@ -138,7 +138,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
 
-  /ttb-back-service/v1/groups/{groupId}:
+  /ttb-back-service/v1/groups/{groupUUID}:
     get:
       summary: Get a group by UUID
       description: Return detail of a specific group by informing its UUID in parameter.
@@ -146,7 +146,7 @@ paths:
         - Groups
       operationId: getGroup
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -190,7 +190,7 @@ paths:
         - Groups
       operationId: updateGroup
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -238,7 +238,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
 
-  /ttb-back-service/v1/groups/{groupId}/labels:
+  /ttb-back-service/v1/groups/{groupUUID}/labels:
     get:
       tags:
         - Groups
@@ -247,7 +247,7 @@ paths:
         specified group.
       operationId: getGroupLabels
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -288,7 +288,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
   
-  /ttb-back-service/v1/groups/{groupId}/items:
+  /ttb-back-service/v1/groups/{groupUUID}/items:
     get:
       tags:
         - Groups
@@ -296,7 +296,7 @@ paths:
       description: Returns all items associated with the specified group.
       operationId: getGroupItems
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -460,7 +460,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
   
-  /ttb-back-service/v1/items/{itemId}:
+  /ttb-back-service/v1/items/{itemUUID}:
     get:
       tags:
         - Items
@@ -468,7 +468,7 @@ paths:
       description: Returns the full details of a specific item by its unique identifier.
       operationId: getItemById
       parameters:
-        - name: itemId
+        - name: itemUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the item.
@@ -515,7 +515,7 @@ paths:
       description: Permanently removes a specific item identified by its UUID.
       operationId: deleteItemById
       parameters:
-        - name: itemId
+        - name: itemUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the item to be deleted.
@@ -551,7 +551,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
 
-  /ttb-back-service/v1/items/{itemId}/stores:
+  /ttb-back-service/v1/items/{itemUUID}/stores:
     get:
       tags:
         - Stores
@@ -559,7 +559,7 @@ paths:
       description: Returns list of stores of an specific item.
       operationId: getItemStores
       parameters:
-        - name: itemId
+        - name: itemUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the item.
@@ -592,7 +592,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
   
-  /ttb-back-service/v1/stores/{storeId}:
+  /ttb-back-service/v1/stores/{storeUUID}:
     put:
       tags:
         - Stores
@@ -600,7 +600,7 @@ paths:
       description: Updates the shipping for that specific store. The store UUID parameter is already binded to the item.
       operationId: updateStore
       parameters:
-        - name: storeId
+        - name: storeUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the store.
@@ -650,7 +650,7 @@ paths:
       description: Deletes a specific store. The store itself is already binded to an item.
       operationId: deleteStore
       parameters:
-        - name: storeId
+        - name: storeUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the store.
@@ -730,7 +730,7 @@ components:
         store:
           type: string
           example: Lenovo.com
-        groupId:
+        groupUUID:
           type: string
           format: uuid
           example: 019d91b3-12ab-773e-8f54-5162f6d87e56
@@ -911,7 +911,7 @@ components:
     GroupLabels:
       type: object
       properties:
-        groupId:
+        groupUUID:
           type: string
           format: uuid
           example: 019d91b3-12ab-773e-8f54-5162f6d87e56
