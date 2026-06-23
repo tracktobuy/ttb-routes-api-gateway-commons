@@ -11,7 +11,7 @@ info:
   version: 1.0.12
 x-amazon-apigateway-cors:
   allowOrigins:
-    - "https://app.tracktobuy.com"
+    - "https://api.tracktobuy.com"
     - "https://tracktobuy.com"
     - "http://localhost"
     - "http://localhost:8080"
@@ -24,6 +24,11 @@ x-amazon-apigateway-cors:
     - Content-Type
     - Authorization
   maxAge: 300
+servers:
+  - url: https://api.tracktobuy.com
+    description: Production server
+  - url: https://localhost:8080
+    description: Local server
 security:
   - bearerAuth: []
 tags:
@@ -945,20 +950,42 @@ components:
         title:
           type: string
           example: Guitar Gibson Flying V
-        price:
+        lowestCost:
           type: number
           format: float
-          example: 2300.0
+          example: 240.32
         image:
           type: string
           format: uri
           example: https://domain.com/image.png
+        labels:
+          type: array
+          items:
+            type: string
+          example:
+            - computer
+            - equipment
+            - guitars
+            - laptop
+            - live
+            - music
+            - work
+        createdBy:
+          type: object
+          $ref: "#/components/schemas/UserResponse"
     GroupItemsResponse:
       type: object
       properties:
         data:
           type: object
           properties:
+            groupUUID:
+              type: string
+              format: uuid
+              example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+            groupName:
+              type: string
+              example: wishlist
             items:
               type: array
               items:
@@ -1049,8 +1076,8 @@ components:
           format: datetime
           example: 2025-05-01T12:33:22       
         createdBy:
-          description: User UUID that created the group. May be omitted if empty
-          example: 1fbd9af6-bfe0-4aa4-b14b-46663953ce5e
+          type: object
+          $ref: "#/components/schemas/UserResponse"
     UserResponse:
       type: object
       properties:
