@@ -11,7 +11,7 @@ info:
   version: 1.0.12
 x-amazon-apigateway-cors:
   allowOrigins:
-    - "https://app.tracktobuy.com"
+    - "https://api.tracktobuy.com"
     - "https://tracktobuy.com"
     - "http://localhost"
     - "http://localhost:8080"
@@ -24,6 +24,11 @@ x-amazon-apigateway-cors:
     - Content-Type
     - Authorization
   maxAge: 300
+servers:
+  - url: https://api.tracktobuy.com
+    description: Production server
+  - url: https://localhost:8080
+    description: Local server
 security:
   - bearerAuth: []
 tags:
@@ -138,7 +143,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
 
-  /ttb-back-service/v1/groups/{groupId}:
+  /ttb-back-service/v1/groups/{groupUUID}:
     get:
       summary: Get a group by UUID
       description: Return detail of a specific group by informing its UUID in parameter.
@@ -146,7 +151,7 @@ paths:
         - Groups
       operationId: getGroup
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -190,7 +195,7 @@ paths:
         - Groups
       operationId: updateGroup
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -238,7 +243,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
 
-  /ttb-back-service/v1/groups/{groupId}/labels:
+  /ttb-back-service/v1/groups/{groupUUID}/labels:
     get:
       tags:
         - Groups
@@ -247,7 +252,7 @@ paths:
         specified group.
       operationId: getGroupLabels
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -288,7 +293,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
   
-  /ttb-back-service/v1/groups/{groupId}/items:
+  /ttb-back-service/v1/groups/{groupUUID}/items:
     get:
       tags:
         - Groups
@@ -296,7 +301,7 @@ paths:
       description: Returns all items associated with the specified group.
       operationId: getGroupItems
       parameters:
-        - name: groupId
+        - name: groupUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the group.
@@ -460,7 +465,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
   
-  /ttb-back-service/v1/items/{itemId}:
+  /ttb-back-service/v1/items/{itemUUID}:
     get:
       tags:
         - Items
@@ -468,7 +473,7 @@ paths:
       description: Returns the full details of a specific item by its unique identifier.
       operationId: getItemById
       parameters:
-        - name: itemId
+        - name: itemUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the item.
@@ -515,7 +520,7 @@ paths:
       description: Permanently removes a specific item identified by its UUID.
       operationId: deleteItemById
       parameters:
-        - name: itemId
+        - name: itemUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the item to be deleted.
@@ -551,7 +556,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
 
-  /ttb-back-service/v1/items/{itemId}/stores:
+  /ttb-back-service/v1/items/{itemUUID}/stores:
     get:
       tags:
         - Stores
@@ -559,7 +564,7 @@ paths:
       description: Returns list of stores of an specific item.
       operationId: getItemStores
       parameters:
-        - name: itemId
+        - name: itemUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the item.
@@ -592,7 +597,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
   
-  /ttb-back-service/v1/stores/{storeId}:
+  /ttb-back-service/v1/stores/{storeUUID}:
     put:
       tags:
         - Stores
@@ -600,7 +605,7 @@ paths:
       description: Updates the shipping for that specific store. The store UUID parameter is already binded to the item.
       operationId: updateStore
       parameters:
-        - name: storeId
+        - name: storeUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the store.
@@ -650,7 +655,7 @@ paths:
       description: Deletes a specific store. The store itself is already binded to an item.
       operationId: deleteStore
       parameters:
-        - name: storeId
+        - name: storeUUID
           in: path
           required: true
           description: The unique identifier (UUID) of the store.
@@ -730,7 +735,7 @@ components:
         store:
           type: string
           example: Lenovo.com
-        groupId:
+        groupUUID:
           type: string
           format: uuid
           example: 019d91b3-12ab-773e-8f54-5162f6d87e56
@@ -911,7 +916,7 @@ components:
     GroupLabels:
       type: object
       properties:
-        groupId:
+        groupUUID:
           type: string
           format: uuid
           example: 019d91b3-12ab-773e-8f54-5162f6d87e56
@@ -945,20 +950,42 @@ components:
         title:
           type: string
           example: Guitar Gibson Flying V
-        price:
+        lowestCost:
           type: number
           format: float
-          example: 2300.0
+          example: 240.32
         image:
           type: string
           format: uri
           example: https://domain.com/image.png
+        labels:
+          type: array
+          items:
+            type: string
+          example:
+            - computer
+            - equipment
+            - guitars
+            - laptop
+            - live
+            - music
+            - work
+        createdBy:
+          type: object
+          $ref: "#/components/schemas/UserResponse"
     GroupItemsResponse:
       type: object
       properties:
         data:
           type: object
           properties:
+            groupUUID:
+              type: string
+              format: uuid
+              example: 019d91b3-12ab-773e-8f54-5162f6d87e56
+            groupName:
+              type: string
+              example: wishlist
             items:
               type: array
               items:
@@ -1049,8 +1076,8 @@ components:
           format: datetime
           example: 2025-05-01T12:33:22       
         createdBy:
-          description: User UUID that created the group. May be omitted if empty
-          example: 1fbd9af6-bfe0-4aa4-b14b-46663953ce5e
+          type: object
+          $ref: "#/components/schemas/UserResponse"
     UserResponse:
       type: object
       properties:
