@@ -217,7 +217,6 @@ paths:
             type: string
             format: uuid
             example: 019d91b3-12ab-773e-8f54-5162f6d87e56
-      
       requestBody:
         description: Group information to update
         required: true
@@ -225,7 +224,6 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/GroupRequest"
-
       responses:
         "200":
           description: Successful operation
@@ -255,6 +253,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "PUT"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
+
+
 
   /ttb-back-service/v1/groups/{groupUUID}/labels:
     get:
