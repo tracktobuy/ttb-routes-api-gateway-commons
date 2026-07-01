@@ -188,6 +188,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        type: HTTP_PROXY
+        httpMethod: GET
+        uri: https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}
+        payloadFormatVersion: "1.0"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
+        requestParameters:
+          integration.request.path.id: method.request.path.groupUUID
+
     put:
       summary: Update group information
       description: Update name, budget and budget currency.
