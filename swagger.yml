@@ -191,11 +191,11 @@ paths:
         payloadFormatVersion: "1.0"
         type: "http_proxy"
         httpMethod: "GET"
-        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupuuid}"
         connectionType: INTERNET
         timeoutInMillis: 29000
         requestParameters:
-          integration.request.path.groupUUID: method.request.path.groupUUID
+          integration.request.path.groupuuid: method.request.path.groupUUID
 
     put:
       summary: Update group information
