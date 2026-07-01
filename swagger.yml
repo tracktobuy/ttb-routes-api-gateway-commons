@@ -142,6 +142,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "POST"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/accounts"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
 
   /ttb-back-service/v1/groups/{groupUUID}:
     get:
