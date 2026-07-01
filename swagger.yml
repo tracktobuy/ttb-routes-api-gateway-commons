@@ -188,14 +188,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
       x-amazon-apigateway-integration:
-        type: http_proxy
-        httpMethod: GET
-        uri: https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}
-        payloadFormatVersion: "1.0"
-        connectionType: INTERNET
-        timeoutInMillis: 29000
-        requestParameters:
-          integration.request.path.groupUUID: method.request.path.groupUUID
+        $ref: "#/components/x-amazon-apigateway-integrations/groupGetIntegration"
 
     put:
       summary: Update group information
@@ -701,6 +694,16 @@ paths:
 
        
 components:
+  x-amazon-apigateway-integrations:
+    groupGetIntegration:
+      type: http_proxy
+      httpMethod: GET
+      uri: https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}
+      payloadFormatVersion: "1.0"
+      connectionType: INTERNET
+      timeoutInMillis: 29000
+      requestParameters:
+        integration.request.path.groupUUID: method.request.path.groupUUID
   securitySchemes:
     bearerAuth:
       type: http
