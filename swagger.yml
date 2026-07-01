@@ -196,7 +196,7 @@ paths:
         connectionType: INTERNET
         timeoutInMillis: 29000
         requestParameters:
-          integration.request.path.id: method.request.path.groupUUID
+          integration.request.path.groupUUID: method.request.path.groupUUID
 
     put:
       summary: Update group information
