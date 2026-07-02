@@ -201,7 +201,6 @@ paths:
         uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}"
         connectionType: INTERNET
         timeoutInMillis: 29000
-
     put:
       summary: Update group information
       description: Update name, budget and budget currency.
@@ -261,8 +260,6 @@ paths:
         connectionType: INTERNET
         timeoutInMillis: 29000
 
-
-
   /ttb-back-service/v1/groups/{groupUUID}/labels:
     get:
       tags:
@@ -312,6 +309,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "GET"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}/labels"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
   
   /ttb-back-service/v1/groups/{groupUUID}/items:
     get:
@@ -361,6 +365,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "GET"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/groups/{groupUUID}/items"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
   
   /ttb-back-service/v1/extractions:
     get:
@@ -446,6 +457,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "POST"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/items"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
     get:
       tags:
         - Items
@@ -484,6 +502,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "GET"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/items"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
   
   /ttb-back-service/v1/items/{itemUUID}:
     get:
@@ -526,13 +551,20 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotFoundResponse"
-
         "500":
           description: Service unavailable 
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "GET"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/items/{itemUUID}"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
+
     delete:
       tags:
         - Items
@@ -616,6 +648,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "GET"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/items/{itemUUID}/stores"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
   
   /ttb-back-service/v1/stores/{storeUUID}:
     put:
@@ -668,6 +707,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "PUT"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/stores/{storeUUID}"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
+
     delete:
       tags:
         - Stores
@@ -710,6 +757,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerErrorResponse"
+      x-amazon-apigateway-integration:
+        payloadFormatVersion: "1.0"
+        type: "http_proxy"
+        httpMethod: "DELETE"
+        uri: "https://ttb-back-service.xg3kx685461ye.us-east-2.cs.amazonlightsail.com/stores/{storeUUID}"
+        connectionType: INTERNET
+        timeoutInMillis: 29000
 
        
 components:
